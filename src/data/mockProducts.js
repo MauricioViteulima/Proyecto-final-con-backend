@@ -81,6 +81,10 @@ export const storeProducts = [
     image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=900&q=80',
     stock: 12,
     modelType: 'mochila',
+    modelUrl: '/models/backpack.fbx',
+    modelScale: 0.025,
+    modelPosition: [0, -1.05, 0],
+    modelRotation: [0, Math.PI, 0],
   },
   {
     id: 'store-8',

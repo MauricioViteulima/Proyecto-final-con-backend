@@ -1,4 +1,4 @@
-import { Center, Environment, OrbitControls, useFBX, useGLTF } from '@react-three/drei'
+import { Center, OrbitControls, useFBX, useGLTF } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Component, Suspense, useEffect, useRef, useState } from 'react'
 
@@ -119,6 +119,17 @@ function UrlModel(props) {
   return <FbxModel {...props} />
 }
 
+function LoadingModel() {
+  return (
+    <group>
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.45, 0.025, 12, 64]} />
+        <meshStandardMaterial color="#ff4b00" roughness={0.3} />
+      </mesh>
+    </group>
+  )
+}
+
 async function checkModelUrl(url) {
   const response = await fetch(url)
   if (!response.ok) return false
@@ -163,9 +174,12 @@ function ModelContent({ modelType, modelUrl, modelScale, modelPosition, modelRot
     }
   }, [modelUrl])
 
-  const canLoadModel = modelStatus.url === modelUrl && modelStatus.canLoad
+  const isCurrentModelChecked = modelStatus.url === modelUrl
+  const canLoadModel = isCurrentModelChecked && modelStatus.canLoad
 
-  if (!modelUrl || !canLoadModel) return <Model type={modelType} />
+  if (!modelUrl) return <Model type={modelType} />
+  if (!isCurrentModelChecked) return <LoadingModel />
+  if (!canLoadModel) return <Model type={modelType} />
 
   return <UrlModel url={modelUrl} scale={modelScale} position={modelPosition} rotation={modelRotation} />
 }
@@ -198,9 +212,11 @@ export default function Product3DViewer({ modelType, modelUrl, modelScale, model
     <div className="h-[320px] overflow-hidden rounded-lg border border-white/10 bg-[#111313]">
       <Canvas camera={{ position: [0, 1.2, 4], fov: 42 }}>
         <ambientLight intensity={0.8} />
+        <hemisphereLight args={['#ffffff', '#ff7a3d', 1.1]} />
         <directionalLight position={[3, 4, 3]} intensity={2.3} />
+        <directionalLight position={[-3, 2, -2]} intensity={0.8} />
         <ModelErrorBoundary resetKey={modelUrl} fallback={<Model type={modelType} />}>
-          <Suspense fallback={<Model type={modelType} />}>
+          <Suspense fallback={modelUrl ? <LoadingModel /> : <Model type={modelType} />}>
             <ModelContent
               modelType={modelType}
               modelUrl={modelUrl}
@@ -210,7 +226,6 @@ export default function Product3DViewer({ modelType, modelUrl, modelScale, model
             />
           </Suspense>
         </ModelErrorBoundary>
-        <Environment preset="city" />
         <OrbitControls enablePan={false} />
       </Canvas>
     </div>
