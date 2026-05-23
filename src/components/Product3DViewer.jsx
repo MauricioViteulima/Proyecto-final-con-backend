@@ -84,8 +84,8 @@ function FbxModel({ url, scale = 0.02, position = [0, 0, 0], rotation = [0, 0, 0
   })
 
   return (
-    <group ref={ref} position={position} rotation={rotation}>
-      <Center>
+    <group ref={ref} rotation={rotation}>
+      <Center position={position}>
         <primitive object={object} scale={scale} />
       </Center>
     </group>
@@ -101,8 +101,8 @@ function GltfModel({ url, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0] 
   })
 
   return (
-    <group ref={ref} position={position} rotation={rotation}>
-      <Center>
+    <group ref={ref} rotation={rotation}>
+      <Center position={position}>
         <primitive object={scene} scale={scale} />
       </Center>
     </group>
