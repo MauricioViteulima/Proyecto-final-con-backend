@@ -23,7 +23,13 @@ export default function StoreDetail() {
           <img className="h-[420px] w-full object-cover" src={product.image} alt={product.name} />
         </div>
         <Suspense fallback={<div className="grid h-[320px] place-items-center rounded-lg border border-white/10 bg-[#111313] text-sm text-slate-400">Cargando visor 3D...</div>}>
-          <Product3DViewer modelType={product.modelType} />
+          <Product3DViewer
+            modelType={product.modelType}
+            modelUrl={product.modelUrl}
+            modelScale={product.modelScale}
+            modelPosition={product.modelPosition}
+            modelRotation={product.modelRotation}
+          />
         </Suspense>
       </div>
       <section className="glass-panel rounded-lg p-6">

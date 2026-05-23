@@ -31,6 +31,10 @@ export const storeProducts = [
     image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80',
     stock: 18,
     modelType: 'polo',
+    modelUrl: '/models/blackshirt.fbx',
+    modelScale: 0.02,
+    modelPosition: [0, -1.1, 0],
+    modelRotation: [0, Math.PI, 0],
   },
   {
     id: 'store-4',

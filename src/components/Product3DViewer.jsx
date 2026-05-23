@@ -1,4 +1,4 @@
-import { Environment, OrbitControls } from '@react-three/drei'
+import { Center, Environment, OrbitControls, useFBX } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 
@@ -75,13 +75,34 @@ function Model({ type }) {
   )
 }
 
-export default function Product3DViewer({ modelType }) {
+function FbxModel({ url, scale = 0.02, position = [0, 0, 0], rotation = [0, 0, 0] }) {
+  const object = useFBX(url)
+  const ref = useRef()
+
+  useFrame((_, delta) => {
+    if (ref.current) ref.current.rotation.y += delta * 0.35
+  })
+
+  return (
+    <group ref={ref} position={position} rotation={rotation}>
+      <Center>
+        <primitive object={object} scale={scale} />
+      </Center>
+    </group>
+  )
+}
+
+export default function Product3DViewer({ modelType, modelUrl, modelScale, modelPosition, modelRotation }) {
   return (
     <div className="h-[320px] overflow-hidden rounded-lg border border-white/10 bg-[#111313]">
       <Canvas camera={{ position: [0, 1.2, 4], fov: 42 }}>
         <ambientLight intensity={0.8} />
         <directionalLight position={[3, 4, 3]} intensity={2.3} />
-        <Model type={modelType} />
+        {modelUrl ? (
+          <FbxModel url={modelUrl} scale={modelScale} position={modelPosition} rotation={modelRotation} />
+        ) : (
+          <Model type={modelType} />
+        )}
         <Environment preset="city" />
         <OrbitControls enablePan={false} />
       </Canvas>
