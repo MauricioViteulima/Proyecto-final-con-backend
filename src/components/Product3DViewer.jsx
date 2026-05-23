@@ -1,6 +1,6 @@
-import { Center, Environment, OrbitControls, useFBX } from '@react-three/drei'
+import { Center, Environment, OrbitControls, useFBX, useGLTF } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
+import { Component, Suspense, useEffect, useRef, useState } from 'react'
 
 function Model({ type }) {
   const ref = useRef()
@@ -92,17 +92,124 @@ function FbxModel({ url, scale = 0.02, position = [0, 0, 0], rotation = [0, 0, 0
   )
 }
 
+function GltfModel({ url, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0] }) {
+  const { scene } = useGLTF(url)
+  const ref = useRef()
+
+  useFrame((_, delta) => {
+    if (ref.current) ref.current.rotation.y += delta * 0.35
+  })
+
+  return (
+    <group ref={ref} position={position} rotation={rotation}>
+      <Center>
+        <primitive object={scene} scale={scale} />
+      </Center>
+    </group>
+  )
+}
+
+function UrlModel(props) {
+  const extension = props.url.split('?')[0].split('.').pop()?.toLowerCase()
+
+  if (extension === 'gltf' || extension === 'glb') {
+    return <GltfModel {...props} />
+  }
+
+  return <FbxModel {...props} />
+}
+
+async function checkModelUrl(url) {
+  const response = await fetch(url)
+  if (!response.ok) return false
+
+  const extension = url.split('?')[0].split('.').pop()?.toLowerCase()
+  if (extension !== 'gltf') return true
+
+  const gltf = await response.json()
+  const dependencies = [
+    ...(gltf.buffers ?? []).map((buffer) => buffer.uri),
+    ...(gltf.images ?? []).map((image) => image.uri),
+  ].filter((uri) => uri && !uri.startsWith('data:') && !/^https?:\/\//i.test(uri))
+
+  const baseUrl = new URL(url, window.location.origin)
+  const checks = dependencies.map(async (dependency) => {
+    const dependencyUrl = new URL(dependency, baseUrl)
+    const dependencyResponse = await fetch(dependencyUrl)
+    return dependencyResponse.ok
+  })
+
+  return (await Promise.all(checks)).every(Boolean)
+}
+
+function ModelContent({ modelType, modelUrl, modelScale, modelPosition, modelRotation }) {
+  const [modelStatus, setModelStatus] = useState({ url: null, canLoad: false })
+
+  useEffect(() => {
+    let ignore = false
+
+    if (!modelUrl) return undefined
+
+    checkModelUrl(modelUrl)
+      .then((isReady) => {
+        if (!ignore) setModelStatus({ url: modelUrl, canLoad: isReady })
+      })
+      .catch(() => {
+        if (!ignore) setModelStatus({ url: modelUrl, canLoad: false })
+      })
+
+    return () => {
+      ignore = true
+    }
+  }, [modelUrl])
+
+  const canLoadModel = modelStatus.url === modelUrl && modelStatus.canLoad
+
+  if (!modelUrl || !canLoadModel) return <Model type={modelType} />
+
+  return <UrlModel url={modelUrl} scale={modelScale} position={modelPosition} rotation={modelRotation} />
+}
+
+class ModelErrorBoundary extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { failed: false }
+  }
+
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+
+  componentDidUpdate(previousProps) {
+    if (previousProps.resetKey !== this.props.resetKey && this.state.failed) {
+      this.setState({ failed: false })
+    }
+  }
+
+  render() {
+    if (this.state.failed) return this.props.fallback
+
+    return this.props.children
+  }
+}
+
 export default function Product3DViewer({ modelType, modelUrl, modelScale, modelPosition, modelRotation }) {
   return (
     <div className="h-[320px] overflow-hidden rounded-lg border border-white/10 bg-[#111313]">
       <Canvas camera={{ position: [0, 1.2, 4], fov: 42 }}>
         <ambientLight intensity={0.8} />
         <directionalLight position={[3, 4, 3]} intensity={2.3} />
-        {modelUrl ? (
-          <FbxModel url={modelUrl} scale={modelScale} position={modelPosition} rotation={modelRotation} />
-        ) : (
-          <Model type={modelType} />
-        )}
+        <ModelErrorBoundary resetKey={modelUrl} fallback={<Model type={modelType} />}>
+          <Suspense fallback={<Model type={modelType} />}>
+            <ModelContent
+              modelType={modelType}
+              modelUrl={modelUrl}
+              modelScale={modelScale}
+              modelPosition={modelPosition}
+              modelRotation={modelRotation}
+            />
+          </Suspense>
+        </ModelErrorBoundary>
         <Environment preset="city" />
         <OrbitControls enablePan={false} />
       </Canvas>

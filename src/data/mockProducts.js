@@ -9,6 +9,8 @@ export const storeProducts = [
     image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=900&q=80',
     stock: 28,
     modelType: 'tomatodo',
+    modelUrl: '/models/thermos.gltf',
+    modelScale: 0.65,
   },
   {
     id: 'store-2',
