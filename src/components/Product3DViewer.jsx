@@ -1,4 +1,4 @@
-import { Center, OrbitControls, useFBX, useGLTF } from '@react-three/drei'
+import { Center, Environment, OrbitControls, useFBX, useGLTF } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Component, Suspense, useEffect, useRef, useState } from 'react'
 
@@ -211,6 +211,7 @@ export default function Product3DViewer({ modelType, modelUrl, modelScale, model
   return (
     <div className="h-[320px] overflow-hidden rounded-lg border border-white/10 bg-[#111313]">
       <Canvas camera={{ position: [0, 1.2, 4], fov: 42 }}>
+        <Environment files="/models/textures/pergola_walkway_4k.exr" background />
         <ambientLight intensity={0.8} />
         <hemisphereLight args={['#ffffff', '#ff7a3d', 1.1]} />
         <directionalLight position={[3, 4, 3]} intensity={2.3} />
