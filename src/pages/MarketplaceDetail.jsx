@@ -9,14 +9,20 @@ import { formatPrice } from '../utils/format'
 export default function MarketplaceDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { marketplaceProducts, createTransaction } = useApp()
+  const { marketplaceProducts, toggleInterested, isUserInterested, user } = useApp()
   const product = marketplaceProducts.find((item) => item.id === id)
 
   if (!product) return <EmptyState title="Producto no encontrado" text="La publicacion ya no esta disponible." />
 
-  const agree = () => {
-    const transaction = createTransaction(product)
-    navigate(`/transaction/${transaction.id}`)
+  const userId = user?.id || 'guest'
+  const userIsInterested = isUserInterested(product.id, userId)
+  const isOwnProduct = user && product.sellerId === user.id
+
+  const handleAcordarCompra = () => navigate(`/purchase-flow/${product.id}`)
+
+  const handleToggleInterested = (e) => {
+    e.stopPropagation()
+    toggleInterested(product.id, userId)
   }
 
   return (
@@ -42,8 +48,24 @@ export default function MarketplaceDetail() {
           </p>
         </div>
 
+        <div className="mt-6 grid gap-3 rounded-lg border border-white/10 bg-white/5 p-4">
+          <p className="text-sm text-slate-300">Interesados: <span className="font-bold text-[#10b981]">{product.interestedCount || 0}</span></p>
+        </div>
+
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          <Button onClick={agree} className="flex-1">Acordar compra</Button>
+          {isOwnProduct ? (
+            <div className="flex-1 rounded-md border border-slate-600 px-3 py-2 text-center text-sm text-slate-400">
+              Tu publicación
+            </div>
+          ) : userIsInterested ? (
+            <Button onClick={handleToggleInterested} className="flex-1 bg-[#ff4b00] hover:bg-[#ff6b1a]">
+              ✓ Interesado
+            </Button>
+          ) : (
+            <Button onClick={handleAcordarCompra} className="flex-1">
+              Acordar compra
+            </Button>
+          )}
           <FavoriteButton id={product.id} label />
         </div>
       </section>

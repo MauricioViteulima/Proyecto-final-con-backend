@@ -16,9 +16,16 @@ const writeStorage = (key, value) => localStorage.setItem(key, JSON.stringify(va
 
 export function AppProvider({ children }) {
   const [user, setUserState] = useState(() => readStorage('ulima_user', null))
-  const [marketplaceProducts, setMarketplaceProductsState] = useState(() =>
-    readStorage('ulima_marketplaceProducts', mockMarketplaceProducts),
-  )
+  const [marketplaceProducts, setMarketplaceProductsState] = useState(() => {
+    const items = readStorage('ulima_marketplaceProducts', mockMarketplaceProducts)
+    return items.map((item) => ({
+      ...item,
+      whatsapp: item.whatsapp || '',
+      status: item.status || 'disponible',
+      interestedCount: item.interestedCount || 0,
+      interestedBy: item.interestedBy || [],
+    }))
+  })
   const [cart, setCartState] = useState(() => readStorage('ulima_cart', []))
   const [favorites, setFavoritesState] = useState(() => readStorage('ulima_favorites', []))
   const [transactions, setTransactionsState] = useState(() => readStorage('ulima_transactions', []))
@@ -76,6 +83,10 @@ export function AppProvider({ children }) {
       sellerId: seller.id,
       sellerName: seller.name,
       sellerReputation: seller.reputation,
+      whatsapp: product.whatsapp || '',
+      status: product.status || 'disponible',
+      interestedCount: product.interestedCount || 0,
+      interestedBy: product.interestedBy || [],
       createdAt: new Date().toISOString().slice(0, 10),
     }
     setMarketplaceProducts((items) => [nextProduct, ...items])
@@ -85,9 +96,44 @@ export function AppProvider({ children }) {
 
   const updateMarketplaceProduct = (id, updates) => {
     setMarketplaceProducts((items) =>
-      items.map((item) => (item.id === id ? { ...item, ...updates, price: Number(updates.price) } : item)),
+      items.map((item) =>
+        item.id === id
+          ? { ...item, ...updates, price: updates.price !== undefined ? Number(updates.price) : item.price }
+          : item,
+      ),
     )
     notify('Publicacion actualizada')
+  }
+
+  const toggleInterested = (id, userId) => {
+    let wasInterested = false
+    setMarketplaceProducts((items) =>
+      items.map((item) => {
+        if (item.id !== id) return item
+        const interestedBy = item.interestedBy || []
+        const isInterested = interestedBy.includes(userId)
+        wasInterested = isInterested
+        const nextInterestedBy = isInterested ? interestedBy.filter((uid) => uid !== userId) : [...interestedBy, userId]
+        const nextCount = nextInterestedBy.length
+        return {
+          ...item,
+          interestedBy: nextInterestedBy,
+          interestedCount: nextCount,
+          status: nextCount > 0 && item.status !== 'vendido' ? 'interesado' : item.status === 'vendido' ? 'vendido' : 'disponible',
+        }
+      }),
+    )
+    notify(wasInterested ? 'Interés cancelado' : 'Interés registrado')
+  }
+
+  const isUserInterested = (id, userId) => {
+    const product = marketplaceProducts.find((item) => item.id === id)
+    return product && product.interestedBy && product.interestedBy.includes(userId)
+  }
+
+  const confirmPresencial = (id) => {
+    setMarketplaceProducts((items) => items.map((item) => (item.id === id ? { ...item, status: 'vendido' } : item)))
+    notify('Publicacion marcada como vendida')
   }
 
   const deleteMarketplaceProduct = (id) => {
@@ -185,6 +231,9 @@ export function AppProvider({ children }) {
     addMarketplaceProduct,
     updateMarketplaceProduct,
     deleteMarketplaceProduct,
+    toggleInterested,
+    isUserInterested,
+    confirmPresencial,
     cart,
     cartDetails,
     cartTotal,

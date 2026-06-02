@@ -7,7 +7,7 @@ import { useApp } from '../context/useApp'
 import { formatPrice } from '../utils/format'
 
 export default function Profile() {
-  const { user, marketplaceProducts, deleteMarketplaceProduct, transactions } = useApp()
+  const { user, marketplaceProducts, deleteMarketplaceProduct, transactions, confirmPresencial } = useApp()
 
   if (!user) {
     return (
@@ -34,23 +34,41 @@ export default function Profile() {
           </div>
           {publications.length ? (
             <div className="space-y-3">
-              {publications.map((product) => (
-                <article key={product.id} className="grid gap-3 rounded-lg border border-white/10 bg-white/5 p-3 sm:grid-cols-[80px_1fr_auto] sm:items-center">
-                  <img className="h-20 w-full rounded-md object-cover sm:w-20" src={product.image} alt={product.title} />
-                  <div>
-                    <h3 className="font-bold">{product.title}</h3>
-                    <p className="text-sm text-slate-400">{product.category} · {formatPrice(product.price)}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Link className="rounded-md border border-white/10 p-2 hover:bg-white/10" to={`/marketplace/publish?edit=${product.id}`} title="Editar">
-                      <Edit3 size={17} />
-                    </Link>
-                    <button className="rounded-md border border-white/10 p-2 text-red-300 hover:bg-white/10" onClick={() => deleteMarketplaceProduct(product.id)} title="Eliminar">
-                      <Trash2 size={17} />
-                    </button>
-                  </div>
-                </article>
-              ))}
+              {publications.map((product) => {
+                const statusLabel =
+                  product.status === 'vendido'
+                    ? 'vendido'
+                    : product.status === 'interesado'
+                    ? `interesado (${product.interestedCount || 0})`
+                    : 'disponible'
+
+                return (
+                  <article key={product.id} className="grid gap-3 rounded-lg border border-white/10 bg-white/5 p-3 sm:grid-cols-[80px_1fr_auto] sm:items-center">
+                    <img className="h-20 w-full rounded-md object-cover sm:w-20" src={product.image} alt={product.title} />
+                    <div>
+                      <h3 className="font-bold">{product.title}</h3>
+                      <p className="text-sm text-slate-400">{product.category} · {formatPrice(product.price)}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-md border border-[#ff4b00]/30 px-2 py-1 text-xs font-bold text-[#ff9b72]">{statusLabel}</span>
+                      <Link className="rounded-md border border-white/10 p-2 hover:bg-white/10" to={`/marketplace/publish?edit=${product.id}`} title="Editar">
+                        <Edit3 size={17} />
+                      </Link>
+                      <button className="rounded-md border border-white/10 p-2 text-red-300 hover:bg-white/10" onClick={() => deleteMarketplaceProduct(product.id)} title="Eliminar">
+                        <Trash2 size={17} />
+                      </button>
+                      {product.status !== 'vendido' && (
+                        <button
+                          className="ml-2 rounded-md bg-[#ff4b00] px-3 py-1 text-sm font-bold text-white hover:opacity-90"
+                          onClick={() => confirmPresencial(product.id)}
+                        >
+                          Confirmar compra presencial
+                        </button>
+                      )}
+                    </div>
+                  </article>
+                )
+              })}
             </div>
           ) : (
             <EmptyState title="Aun no tienes publicaciones" text="Crea un producto desde Publicar Producto." />

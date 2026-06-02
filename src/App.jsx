@@ -7,6 +7,7 @@ import Register from './pages/Register'
 import Marketplace from './pages/Marketplace'
 import PublishProduct from './pages/PublishProduct'
 import MarketplaceDetail from './pages/MarketplaceDetail'
+import PurchaseFlow from './pages/PurchaseFlow'
 import Store from './pages/Store'
 import StoreDetail from './pages/StoreDetail'
 import CartPage from './pages/CartPage'
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/marketplace/publish" element={<PublishProduct />} />
           <Route path="/marketplace/product/:id" element={<MarketplaceDetail />} />
+          <Route path="/purchase-flow/:id" element={<PurchaseFlow />} />
           <Route path="/store" element={<Store />} />
           <Route path="/store/product/:id" element={<StoreDetail />} />
           <Route path="/cart" element={<CartPage />} />

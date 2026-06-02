@@ -11,7 +11,7 @@ const initialState = {
   condition: '',
   image: '',
   location: '',
-  contact: '',
+  whatsapp: '',
 }
 
 export default function PublicationForm({ initialProduct, onSubmit }) {
@@ -28,13 +28,14 @@ export default function PublicationForm({ initialProduct, onSubmit }) {
     if (!form.price || Number(form.price) <= 0) nextErrors.price = 'El precio debe ser mayor a 0'
     if (!form.category) nextErrors.category = 'Selecciona una categoria'
     if (!form.condition) nextErrors.condition = 'Selecciona una condicion'
+    if (!form.whatsapp || !form.whatsapp.trim()) nextErrors.whatsapp = 'El numero de WhatsApp es obligatorio'
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length) return
     onSubmit({
       ...form,
       image: form.image || 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80',
       location: form.location || 'Biblioteca',
-      contact: form.contact || 'Chat simulado por correo institucional',
+      whatsapp: form.whatsapp || '',
     })
   }
 
@@ -101,8 +102,21 @@ export default function PublicationForm({ initialProduct, onSubmit }) {
       </div>
 
       <label className="space-y-1">
-        <span className="text-sm text-slate-300">Metodo de contacto simulado</span>
-        <input className={inputClass} value={form.contact} onChange={(event) => update('contact', event.target.value)} placeholder="Correo, WhatsApp simulado, Instagram..." />
+        <span className="text-sm text-slate-300">Numero de WhatsApp (ej. 9XXXXXXXX)</span>
+        <div className="flex items-center rounded-md border border-white/10 bg-[#171a1a] overflow-hidden focus-within:border-[#ff4b00]">
+          <span className="px-3 py-2 text-sm text-slate-400">+51</span>
+          <input
+            className="flex-1 border-none bg-transparent px-0 py-2 text-sm outline-none"
+            value={form.whatsapp}
+            onChange={(event) => {
+              const numOnly = event.target.value.replace(/\D/g, '')
+              update('whatsapp', numOnly)
+            }}
+            placeholder="9XXXXXXXX"
+            maxLength="9"
+          />
+        </div>
+        {errors.whatsapp && <p className="text-xs text-red-300">{errors.whatsapp}</p>}
       </label>
 
       <div className="flex justify-end">
