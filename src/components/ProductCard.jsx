@@ -41,9 +41,15 @@ export default function ProductCard({ product }) {
             )}
           </div>
         )}
-        <Link to={href} className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#ff4b00] px-3 py-2 text-sm font-semibold text-[#ff7a3d] transition hover:bg-[#ff4b00] hover:text-white">
-          Ver detalle <ArrowRight size={16} />
-        </Link>
+        {product.status === 'vendido' ? (
+          <button disabled className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-slate-600 px-3 py-2 text-sm font-semibold text-slate-500 bg-slate-900/50 cursor-not-allowed">
+            Vendido
+          </button>
+        ) : (
+          <Link to={href} className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#ff4b00] px-3 py-2 text-sm font-semibold text-[#ff7a3d] transition hover:bg-[#ff4b00] hover:text-white">
+            Ver detalle <ArrowRight size={16} />
+          </Link>
+        )}
       </div>
     </article>
   )

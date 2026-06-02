@@ -34,6 +34,11 @@ export default function MarketplaceDetail() {
         <p className="text-sm font-bold uppercase tracking-wide text-[#ff7a3d]">{product.category} · {product.condition}</p>
         <h1 className="mt-2 text-4xl font-black">{product.title}</h1>
         <p className="mt-3 text-3xl font-black text-[#ff7a3d]">{formatPrice(product.price)}</p>
+        {product.status === 'vendido' && (
+          <div className="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3">
+            <p className="text-sm font-bold text-red-400">Este producto ya ha sido vendido</p>
+          </div>
+        )}
         <p className="mt-5 leading-7 text-slate-300">{product.description}</p>
 
         <div className="mt-6 grid gap-3 rounded-lg border border-white/10 bg-white/5 p-4">
@@ -53,7 +58,11 @@ export default function MarketplaceDetail() {
         </div>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          {isOwnProduct ? (
+          {product.status === 'vendido' ? (
+            <Button disabled className="flex-1">
+              Vendido
+            </Button>
+          ) : isOwnProduct ? (
             <div className="flex-1 rounded-md border border-slate-600 px-3 py-2 text-center text-sm text-slate-400">
               Tu publicación
             </div>

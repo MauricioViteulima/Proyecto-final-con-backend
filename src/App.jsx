@@ -13,7 +13,6 @@ import StoreDetail from './pages/StoreDetail'
 import CartPage from './pages/CartPage'
 import Favorites from './pages/Favorites'
 import Profile from './pages/Profile'
-import TransactionRoom from './pages/TransactionRoom'
 import NotFound from './pages/NotFound'
 import Toast from './components/Toast'
 
@@ -35,7 +34,6 @@ export default function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/transaction/:id" element={<TransactionRoom />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

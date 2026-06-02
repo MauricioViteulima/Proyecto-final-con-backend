@@ -23,7 +23,7 @@ export default function StoreProductCard({ product }) {
           <span className="text-xl font-black text-[#ff7a3d]">{formatPrice(product.price)}</span>
           <span className="text-xs text-slate-400">Stock {product.stock}</span>
         </div>
-        <button onClick={() => addToCart(product)} className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#ff4b00] px-3 py-2 text-sm font-semibold text-[#ff7a3d] transition hover:bg-[#ff4b00] hover:text-white">
+       <button onClick={() => addToCart(product)} className="inline-flex w-full items-center justify-center gap-2 rounded-md border border-[#ff4b00] px-3 py-2 text-sm font-semibold text-[#ff7a3d] transition hover:bg-[#ff4b00] hover:text-white">
           <ShoppingCart size={16} /> Comprar
         </button>
       </div>
