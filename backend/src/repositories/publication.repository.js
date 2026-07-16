@@ -1,15 +1,15 @@
-import Endpoint1 from '../models/endpoint1.model.js'
+import Publication from '../models/publication.model.js'
 
 export async function findAll() {
-  return Endpoint1.findAll({ order: [['id', 'ASC']] })
+  return Publication.findAll({ order: [['id', 'ASC']] })
 }
 
 export async function findById(id) {
-  return Endpoint1.findByPk(id)
+  return Publication.findByPk(id)
 }
 
 export async function create(payload) {
-  return Endpoint1.create(payload)
+  return Publication.create(payload)
 }
 
 export async function update(id, payload) {

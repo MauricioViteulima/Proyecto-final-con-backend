@@ -3,8 +3,8 @@ import { PlusCircle, Trash2, Edit3 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
 import EmptyState from '../components/EmptyState'
-import Endpoint1Form from '../components/Endpoint1Form'
-import * as endpoint1Api from '../services/endpoint1.api.js'
+import PublicationsForm from '../components/PublicationsForm'
+import * as publicationsApi from '../services/publications.api.js'
 
 const normalizeItem = (item) => ({
   id: item.id,
@@ -13,7 +13,7 @@ const normalizeItem = (item) => ({
   datos3: Number(item.datos3) || 0,
 })
 
-export default function Endpoint1() {
+export default function Publications() {
   const [items, setItems] = useState([])
   const [selected, setSelected] = useState(null)
   const [error, setError] = useState('')
@@ -23,7 +23,7 @@ export default function Endpoint1() {
   const loadItems = async () => {
     setLoading(true)
     try {
-      const response = await endpoint1Api.findAll()
+      const response = await publicationsApi.findAll()
       setItems(response.map(normalizeItem))
     } catch (err) {
       setError(err.message)
@@ -44,10 +44,10 @@ export default function Endpoint1() {
         datos3: Number(payload.datos3),
       }
       if (selected) {
-        const updated = await endpoint1Api.update({ id: selected.id, ...body })
+        const updated = await publicationsApi.update({ id: selected.id, ...body })
         setItems((current) => current.map((item) => (item.id === updated.id ? normalizeItem(updated) : item)))
       } else {
-        const created = await endpoint1Api.create(body)
+        const created = await publicationsApi.create(body)
         setItems((current) => [...current, normalizeItem(created)])
       }
       setSelected(null)
@@ -59,7 +59,7 @@ export default function Endpoint1() {
 
   const handleDelete = async (id) => {
     try {
-      await endpoint1Api.remove(id)
+      await publicationsApi.remove(id)
       setItems((current) => current.filter((item) => item.id !== id))
       if (selected?.id === id) setSelected(null)
       setError('')
@@ -72,11 +72,11 @@ export default function Endpoint1() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-wide text-[#ff7a3d]">Administracion Endpoint1</p>
+          <p className="text-sm font-bold uppercase tracking-wide text-[#ff7a3d]">Administracion Publicaciones</p>
           <h1 className="text-3xl font-black">Datos sincronizados con API</h1>
-          <p className="mt-2 text-slate-400">Gestiona los registros de endpoint1 que se guardan en PostgreSQL.</p>
+          <p className="mt-2 text-slate-400">Gestiona los registros de publicaciones que se guardan en PostgreSQL.</p>
         </div>
-        <Button onClick={() => navigate('/endpoint1')} variant="outline">
+        <Button onClick={() => navigate('/publications')} variant="outline">
           Refrescar lista
         </Button>
       </div>
@@ -118,7 +118,7 @@ export default function Endpoint1() {
 
         <section className="glass-panel rounded-lg p-5">
           <h2 className="text-xl font-black">Formulario</h2>
-          <Endpoint1Form initialItem={selected} onSubmit={handleSave} />
+          <PublicationsForm initialItem={selected} onSubmit={handleSave} />
         </section>
       </div>
     </div>

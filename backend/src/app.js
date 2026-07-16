@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import endpoint1Routes from './routes/endpoint1.routes.js'
+import publicationsRoutes from './routes/publications.routes.js'
 
 const app = express()
 
@@ -26,7 +26,7 @@ app.use(
 
 app.use(express.json())
 
-app.use('/api/endpoint1', endpoint1Routes)
+app.use('/api/publications', publicationsRoutes)
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' })

@@ -1,4 +1,4 @@
-import * as repository from '../repositories/endpoint1.repository.js'
+import * as repository from '../repositories/publication.repository.js'
 
 const validatePayload = ({ datos1, datos2, datos3 }) => {
   if (typeof datos1 !== 'string' || datos1.trim() === '') return 'El campo datos1 es obligatorio y debe ser texto.'
@@ -13,7 +13,7 @@ export async function list(req, res) {
     return res.json(items)
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ error: 'Error al listar los registros.' })
+    return res.status(500).json({ error: 'Error al listar las publicaciones.' })
   }
 }
 
@@ -21,12 +21,12 @@ export async function get(req, res) {
   try {
     const item = await repository.findById(req.params.id)
     if (!item) {
-      return res.status(404).json({ error: 'Registro no encontrado.' })
+      return res.status(404).json({ error: 'Publicacion no encontrada.' })
     }
     return res.json(item)
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ error: 'Error al obtener el registro.' })
+    return res.status(500).json({ error: 'Error al obtener la publicacion.' })
   }
 }
 
@@ -44,7 +44,7 @@ export async function createItem(req, res) {
     return res.status(201).json(item)
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ error: 'Error al crear el registro.' })
+    return res.status(500).json({ error: 'Error al crear la publicacion.' })
   }
 }
 
@@ -60,12 +60,12 @@ export async function updateItem(req, res) {
       datos3: Number(req.body.datos3),
     })
     if (!item) {
-      return res.status(404).json({ error: 'Registro no encontrado.' })
+      return res.status(404).json({ error: 'Publicacion no encontrada.' })
     }
     return res.json(item)
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ error: 'Error al actualizar el registro.' })
+    return res.status(500).json({ error: 'Error al actualizar la publicacion.' })
   }
 }
 
@@ -73,11 +73,11 @@ export async function removeItem(req, res) {
   try {
     const deleted = await repository.remove(req.params.id)
     if (!deleted) {
-      return res.status(404).json({ error: 'Registro no encontrado.' })
+      return res.status(404).json({ error: 'Publicacion no encontrada.' })
     }
     return res.status(204).send()
   } catch (error) {
     console.error(error)
-    return res.status(500).json({ error: 'Error al eliminar el registro.' })
+    return res.status(500).json({ error: 'Error al eliminar la publicacion.' })
   }
 }

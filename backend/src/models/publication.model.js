@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize'
 import sequelize from '../config/database.js'
 
-const Endpoint1 = sequelize.define(
-  'Endpoint1',
+const Publication = sequelize.define(
+  'Publication',
   {
     id: {
       type: DataTypes.INTEGER,
@@ -23,9 +23,9 @@ const Endpoint1 = sequelize.define(
     },
   },
   {
-    tableName: 'endpoint1',
+    tableName: 'publications',
     timestamps: false,
   },
 )
 
-export default Endpoint1
+export default Publication

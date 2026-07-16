@@ -13,7 +13,7 @@ import StoreDetail from './pages/StoreDetail'
 import CartPage from './pages/CartPage'
 import Favorites from './pages/Favorites'
 import Profile from './pages/Profile'
-import Endpoint1 from './pages/Endpoint1'
+import Publications from './pages/Publications'
 import NotFound from './pages/NotFound'
 import Toast from './components/Toast'
 
@@ -35,7 +35,7 @@ export default function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/endpoint1" element={<Endpoint1 />} />
+          <Route path="/publications" element={<Publications />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

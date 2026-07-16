@@ -8,7 +8,7 @@ const initialState = {
   datos3: '',
 }
 
-export default function Endpoint1Form({ initialItem, onSubmit }) {
+export default function PublicationsForm({ initialItem, onSubmit }) {
   const [form, setForm] = useState(initialState)
   const [errors, setErrors] = useState({})
 
