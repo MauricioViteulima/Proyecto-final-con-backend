@@ -9,17 +9,60 @@ const Publication = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    datos1: {
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    datos2: {
-      type: DataTypes.TEXT,
+    price: {
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-    datos3: {
+    category: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    condition: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    location: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    whatsapp: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    sellerId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    sellerName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    status: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 'disponible',
+    },
+    interestedCount: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 0,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   },
   {

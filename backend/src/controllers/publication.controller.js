@@ -1,9 +1,11 @@
 import * as repository from '../repositories/publication.repository.js'
 
-const validatePayload = ({ datos1, datos2, datos3 }) => {
-  if (typeof datos1 !== 'string' || datos1.trim() === '') return 'El campo datos1 es obligatorio y debe ser texto.'
-  if (typeof datos2 !== 'string' || datos2.trim() === '') return 'El campo datos2 es obligatorio y debe ser texto.'
-  if (typeof datos3 !== 'number' || Number.isNaN(datos3)) return 'El campo datos3 es obligatorio y debe ser un numero.'
+const validatePayload = ({ title, description, price, category, condition }) => {
+  if (typeof title !== 'string' || title.trim() === '') return 'El campo title es obligatorio y debe ser texto.'
+  if (typeof description !== 'string' || description.trim() === '') return 'El campo description es obligatorio y debe ser texto.'
+  if (price === undefined || price === null || Number.isNaN(Number(price)) || Number(price) <= 0) return 'El campo price es obligatorio y debe ser un numero mayor a 0.'
+  if (typeof category !== 'string' || category.trim() === '') return 'El campo category es obligatorio.'
+  if (typeof condition !== 'string' || condition.trim() === '') return 'El campo condition es obligatorio.'
   return null
 }
 
@@ -37,9 +39,16 @@ export async function createItem(req, res) {
       return res.status(400).json({ error: validationError })
     }
     const item = await repository.create({
-      datos1: req.body.datos1.trim(),
-      datos2: req.body.datos2.trim(),
-      datos3: Number(req.body.datos3),
+      title: req.body.title.trim(),
+      description: req.body.description.trim(),
+      price: Number(req.body.price),
+      category: req.body.category.trim(),
+      condition: req.body.condition.trim(),
+      image: req.body.image || null,
+      location: req.body.location || null,
+      whatsapp: req.body.whatsapp || null,
+      sellerId: req.body.sellerId || null,
+      sellerName: req.body.sellerName || null,
     })
     return res.status(201).json(item)
   } catch (error) {
@@ -55,9 +64,14 @@ export async function updateItem(req, res) {
       return res.status(400).json({ error: validationError })
     }
     const item = await repository.update(req.params.id, {
-      datos1: req.body.datos1.trim(),
-      datos2: req.body.datos2.trim(),
-      datos3: Number(req.body.datos3),
+      title: req.body.title.trim(),
+      description: req.body.description.trim(),
+      price: Number(req.body.price),
+      category: req.body.category.trim(),
+      condition: req.body.condition.trim(),
+      image: req.body.image || null,
+      location: req.body.location || null,
+      whatsapp: req.body.whatsapp || null,
     })
     if (!item) {
       return res.status(404).json({ error: 'Publicacion no encontrada.' })
