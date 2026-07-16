@@ -1,0 +1,21 @@
+{
+  "name": "api-ulima",
+  "version": "1.0.0",
+  "description": "API REST de la ulima",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "pg": "^8.11.2",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.34.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
