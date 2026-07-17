@@ -3,7 +3,7 @@ POST {{baseUrl}}/register
 Content-Type: application/json 
 
 {
-    "username": "Mauricio",
+    "username": "Fernanda",
     "email": "20233256@aloe.ulima.edu.pe",
     "password": "123456"
 }
