@@ -1,0 +1,23 @@
+
+POST http://localhost:3001/api/user/register 
+Content-Type: application/json 
+
+{
+    "username": "Mauricio",
+    "email": "20233256@aloe.ulima.edu.pe",
+    "password": "123456"
+}
+
+### 
+# Login
+POST http://localhost:3001/api/user/login
+Content-Type: application/json 
+
+{
+    "email": "20233256@aloe.ulima.edu.pe",
+    "password": "123456"
+}
+
+###
+# Perfil de usuario 
+GET http://localhost:3001/api/user/profile

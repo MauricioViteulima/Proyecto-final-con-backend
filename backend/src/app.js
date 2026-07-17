@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
-import publicationsRoutes from './routes/publications.routes.js'
+import publicationsRoutes from './routes/publication.routes.js'
+import userRoutes from './routes/user.routes.js'
 
 const app = express()
 
@@ -26,6 +27,7 @@ app.use(
 
 app.use(express.json())
 
+app.use('/api/user', userRoutes)
 app.use('/api/publications', publicationsRoutes)
 
 app.use((req, res) => {

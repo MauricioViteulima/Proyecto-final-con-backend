@@ -1,0 +1,51 @@
+# Lista base 
+GET http://localhost:3001/api/publications
+### 
+ 
+# Listar todos 
+GET http://localhost:3001/api/publications 
+### 
+ 
+# Obetener uno por id 
+GET http://localhost:3001/api/publications/1
+### 
+ 
+# Crear uno nuevo 
+POST http://localhost:3001/api/publications 
+Content-Type: application/json 
+
+{
+  "title": "Laptop Lenovo",
+  "description": "Laptop usada en buen estado",
+  "price": 1500,
+  "category": "Tecnología",
+  "condition": "Usado",
+  "image": "laptop.jpg",
+  "location": "Lima",
+  "whatsapp": "999888777",
+  "sellerId": "123",
+  "sellerName": "Mauricio"
+}
+
+### 
+# Actualizar (el precio) 
+PUT http://localhost:3001/api/publications/1 
+Content-Type: application/json 
+
+{
+    "id": 1 ,
+    "title": "Laptop Lenovo Actualizada", 
+    "description": "Laptop usada en buen estado", 
+    "price": 1600, 
+    "category": "Tecnología", 
+    "condition": "Usado", 
+    "image": "laptop.jpg", 
+    "location": "Lima", 
+    "whatsapp": "999888777", 
+    "sellerId": "123", 
+    "sellerName": "Mauricio"
+} 
+
+###  
+# Eliminar 
+DELETE http://localhost:3001/api/publications/1
