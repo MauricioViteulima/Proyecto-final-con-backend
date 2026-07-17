@@ -1,5 +1,5 @@
-
-POST http://localhost:3001/api/user/register 
+@baseUrl = https://proyecto-final-backend-green.vercel.app/api/user
+POST {{baseUrl}}/register 
 Content-Type: application/json 
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ### 
 # Login
-POST http://localhost:3001/api/user/login
+POST {{baseUrl}}/login
 Content-Type: application/json 
 
 {
@@ -20,4 +20,4 @@ Content-Type: application/json
 
 ###
 # Perfil de usuario 
-GET http://localhost:3001/api/user/profile
+GET {{baseUrl}}/profile

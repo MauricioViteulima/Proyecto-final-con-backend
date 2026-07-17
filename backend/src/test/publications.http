@@ -1,17 +1,15 @@
+
+@baseUrl = https://proyecto-final-backend-green.vercel.app/api/publications
 # Lista base 
-GET http://localhost:3001/api/publications
-### 
- 
-# Listar todos 
-GET http://localhost:3001/api/publications 
+GET {{baseUrl}}
 ### 
  
 # Obetener uno por id 
-GET http://localhost:3001/api/publications/1
+GET {{baseUrl}}/1
 ### 
  
 # Crear uno nuevo 
-POST http://localhost:3001/api/publications 
+POST {{baseUrl}}
 Content-Type: application/json 
 
 {
@@ -29,7 +27,7 @@ Content-Type: application/json
 
 ### 
 # Actualizar (el precio) 
-PUT http://localhost:3001/api/publications/1 
+PUT {{baseUrl}}/1 
 Content-Type: application/json 
 
 {
@@ -48,4 +46,4 @@ Content-Type: application/json
 
 ###  
 # Eliminar 
-DELETE http://localhost:3001/api/publications/1
+DELETE {{baseUrl}}/1
