@@ -22,8 +22,8 @@ export default function Profile() {
     )
   }
 
-  const publications = marketplaceProducts.filter((product) => product.sellerId === user.id || product.sellerName === user.name)
-  const history = transactions.filter((transaction) => transaction.buyer === user.name || transaction.seller === user.name)
+  const publications = marketplaceProducts.filter((product) => product.sellerId === user.id || product.sellerName === (user.name || user.username))
+  const history = transactions.filter((transaction) => transaction.buyer === (user.name || user.username) || transaction.seller === (user.name || user.username))
 
   return (
     <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
