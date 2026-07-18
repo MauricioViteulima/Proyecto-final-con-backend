@@ -12,18 +12,7 @@ const allowedOrigins = [
   'https://pw-frontend.vercel.app',
 ]
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true)
-      }
-      return callback(new Error('CORS policy: Origin not allowed'))
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  }),
-)
+app.use(cors())
 
 app.use(express.json())
 
