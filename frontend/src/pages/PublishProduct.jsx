@@ -24,4 +24,4 @@ export default function PublishProduct() {
       <PublicationForm initialProduct={product} onSubmit={submit} />
     </div>
   )
-}
+}//
