@@ -1,6 +1,6 @@
 import * as baseApi from './Base.js'
 
-const RESOURCE = 'user'
+const RESOURCE = 'api/user'
 
 export async function login(credentials) {
   return baseApi.post(`${RESOURCE}/login`, credentials)

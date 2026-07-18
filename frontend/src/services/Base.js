@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://proyecto-final-backend-mv20.vercel.app/'
+const API_BASE_URL = 'https://proyecto-backend-beta.vercel.app'
 
 const buildUrl = (path) => `${API_BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
 
