@@ -127,6 +127,23 @@ export const storeProducts = [
   },
 ]
 
+export const marketplaceProducts = [
+  
+  {
+    id: 'mk-10',
+    type: 'marketplace',
+    title: 'Audifonos con cable USB-C',
+    description: 'Audifonos para laptop o celular, funcionan perfecto.',
+    price: 22,
+    category: 'Otros',
+    condition: 'Buen estado',
+    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=80',
+    sellerName: 'Bruno Leon',
+    sellerReputation: 4.2,
+    location: 'Pabellón V',
+    createdAt: '2026-04-25',
+  },
+]
 
 export const categories = {
   marketplace: ['Libros', 'Tecnología', 'Útiles', 'Servicios', 'Otros'],
