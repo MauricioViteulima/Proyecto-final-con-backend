@@ -28,16 +28,6 @@ export default function Hero() {
             </Button>
           </div>
         </div>
-        <div className="hidden items-end justify-end lg:flex">
-          <div className="glass-panel max-w-sm rounded-lg p-5">
-            <p className="text-sm font-semibold text-[#ff9b72]">Demo lista para exposicion</p>
-            <p className="mt-2 text-3xl font-black">Frontend completo</p>
-            <p className="mt-2 text-sm text-slate-400">React Router, Context API, localStorage, QR y visor 3D para productos oficiales.</p>
-            <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-white">
-              Explorar ahora <ArrowRight size={16} />
-            </span>
-          </div>
-        </div>
       </div>
     </section>
   )
