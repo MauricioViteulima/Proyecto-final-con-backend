@@ -53,7 +53,7 @@ export function AppProvider({ children }) {
   if (authUser) {
     setUserState((current) => ({
       id: String(authUser.id),
-      name: authUser.name,
+      name: authUser.name || authUser.username || 'Alumno ULIMA',
       email: authUser.email,
       reputation: current?.id === String(authUser.id) ? current.reputation : (authUser.reputation ?? 4.6),
       successfulDeliveries:
