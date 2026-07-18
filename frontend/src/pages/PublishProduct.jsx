@@ -9,12 +9,15 @@ export default function PublishProduct() {
   const product = marketplaceProducts.find((item) => item.id === editId)
   const navigate = useNavigate()
 
-  const submit = (data) => {
-    if (product) updateMarketplaceProduct(product.id, data)
-    else addMarketplaceProduct(data)
+  const submit = async (data) => {
+  try {
+    if (product) await updateMarketplaceProduct(product.id, data)
+    else await addMarketplaceProduct(data)
     navigate('/marketplace')
+  } catch {
+    // El error ya se notificó vía toast dentro de AppContext; no navegamos si falló.
   }
-
+}
   return (
     <div className="mx-auto max-w-4xl space-y-5">
       <div>

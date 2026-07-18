@@ -1,6 +1,6 @@
 import * as baseApi from './Base.js'
 
-const RESOURCE = 'publications'
+const RESOURCE = 'api/publications'
 
 export async function findAll() {
   return baseApi.get(`${RESOURCE}`)
