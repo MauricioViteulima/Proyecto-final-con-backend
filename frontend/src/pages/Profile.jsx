@@ -1,6 +1,7 @@
 import { Edit3, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Button from '../components/Button'
+import BorderTrail from '../components/BorderTrail'
 import EmptyState from '../components/EmptyState'
 import ProfileCard from '../components/ProfileCard'
 import { useAuth } from '../context/AuthContext.jsx'
@@ -45,7 +46,8 @@ export default function Profile() {
                     : 'disponible'
 
                 return (
-                  <article key={product.id} className="grid gap-3 rounded-lg border border-white/10 bg-white/5 p-3 sm:grid-cols-[80px_1fr_auto] sm:items-center">
+                  <article key={product.id} className="group relative grid gap-3 overflow-hidden rounded-lg border border-white/10 bg-white/5 p-3 sm:grid-cols-[80px_1fr_auto] sm:items-center">
+                    {product.status !== 'vendido' && <BorderTrail />}
                     <img className="h-20 w-full rounded-md object-cover sm:w-20" src={product.image} alt={product.title} />
                     <div>
                       <h3 className="font-bold">{product.title}</h3>

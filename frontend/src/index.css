@@ -58,3 +58,117 @@ textarea {
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
+
+@property --trail-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.border-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    conic-gradient(
+      from var(--trail-angle),
+      transparent 0deg,
+      transparent 245deg,
+      rgba(255, 122, 61, 0.18) 280deg,
+      rgba(255, 75, 0, 0.95) 312deg,
+      rgba(255, 203, 164, 0.72) 334deg,
+      transparent 360deg
+    );
+  filter: drop-shadow(0 0 10px rgba(255, 75, 0, 0.42));
+  transition: opacity 220ms ease;
+  animation: border-trail-spin 2.4s linear infinite;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.group:hover > .border-trail,
+.group:focus-within > .border-trail {
+  opacity: 1;
+}
+
+.progressive-blur {
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.progressive-blur__layer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(15, 17, 17, 0.34) 30%, rgba(15, 17, 17, 0.92) 100%);
+  transform: translateZ(0);
+}
+
+.progressive-blur__layer--1 {
+  backdrop-filter: blur(2px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 28%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 28%);
+}
+
+.progressive-blur__layer--2 {
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 16%, #000 52%);
+  mask-image: linear-gradient(180deg, transparent 16%, #000 52%);
+}
+
+.progressive-blur__layer--3 {
+  backdrop-filter: blur(9px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 34%, #000 74%);
+  mask-image: linear-gradient(180deg, transparent 34%, #000 74%);
+}
+
+.progressive-blur__layer--4 {
+  backdrop-filter: blur(16px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 52%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 52%, #000 100%);
+}
+
+.glow-button {
+  position: relative;
+  isolation: isolate;
+}
+
+.glow-effect {
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  border-radius: 0.55rem;
+  opacity: 0;
+  background:
+    conic-gradient(
+      from var(--trail-angle),
+      #ff3d71,
+      #ffb800,
+      #27e8a7,
+      #2f8cff,
+      #a855f7,
+      #ff3d71
+    );
+  filter: blur(16px) saturate(0.95);
+  transition: opacity 220ms ease, transform 220ms ease;
+  animation: border-trail-spin 2.8s linear infinite;
+  transform: scale(0.96);
+}
+
+.glow-button:hover .glow-effect,
+.glow-button:focus-within .glow-effect {
+  opacity: 0.42;
+  transform: scale(0.98);
+}
+
+@keyframes border-trail-spin {
+  to {
+    --trail-angle: 360deg;
+  }
+}

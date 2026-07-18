@@ -1,6 +1,6 @@
 import { Heart, Menu, ShoppingCart, Store, UserRound, X } from 'lucide-react'
-import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { useLayoutEffect, useRef, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useApp } from '../context/useApp'
 import { useAuth } from '../context/AuthContext.jsx'
 
@@ -11,6 +11,104 @@ const navItems = [
   ['/favorites', 'Favoritos'],
   ['/profile', 'Mi Perfil'],
 ]
+
+function AnimatedNavTabs({ items }) {
+  const location = useLocation()
+  const containerRef = useRef(null)
+  const tabRefs = useRef(new Map())
+  const [hoveredPath, setHoveredPath] = useState(null)
+  const [activeHighlight, setActiveHighlight] = useState({ left: 0, width: 0, opacity: 0 })
+  const [hoverHighlight, setHoverHighlight] = useState({ left: 0, width: 0, opacity: 0 })
+
+  const activePath =
+    items.find(([to]) => (to === '/' ? location.pathname === '/' : location.pathname.startsWith(to)))?.[0] ?? '/'
+
+  useLayoutEffect(() => {
+    const container = containerRef.current
+    const activeTab = tabRefs.current.get(activePath)
+
+    if (!container || !activeTab) {
+      setActiveHighlight((current) => ({ ...current, opacity: 0 }))
+      return
+    }
+
+    const containerBox = container.getBoundingClientRect()
+    const tabBox = activeTab.getBoundingClientRect()
+
+    setActiveHighlight({
+      left: tabBox.left - containerBox.left,
+      width: tabBox.width,
+      opacity: 1,
+    })
+  }, [activePath, location.pathname])
+
+  useLayoutEffect(() => {
+    const container = containerRef.current
+    const hoveredTab = hoveredPath ? tabRefs.current.get(hoveredPath) : null
+
+    if (!container || !hoveredTab || hoveredPath === activePath) {
+      setHoverHighlight((current) => ({ ...current, opacity: 0 }))
+      return
+    }
+
+    const containerBox = container.getBoundingClientRect()
+    const tabBox = hoveredTab.getBoundingClientRect()
+
+    setHoverHighlight({
+      left: tabBox.left - containerBox.left,
+      width: tabBox.width,
+      opacity: 1,
+    })
+  }, [hoveredPath, activePath])
+
+  return (
+    <nav
+      ref={containerRef}
+      className="relative hidden items-center gap-1 rounded-lg border border-white/5 bg-white/[0.03] p-1 lg:flex"
+      onMouseLeave={() => setHoveredPath(null)}
+    >
+      <span
+        className="pointer-events-none absolute top-1 bottom-1 rounded-md bg-[#ff4b00] shadow-[0_10px_28px_rgba(255,75,0,0.28)] transition-[left,width,opacity] duration-300 ease-out"
+        style={{
+          left: `${activeHighlight.left}px`,
+          width: `${activeHighlight.width}px`,
+          opacity: activeHighlight.opacity,
+        }}
+      />
+      <span
+        className="pointer-events-none absolute top-1 bottom-1 rounded-md bg-white/12 transition-[left,width,opacity] duration-300 ease-out"
+        style={{
+          left: `${hoverHighlight.left}px`,
+          width: `${hoverHighlight.width}px`,
+          opacity: hoverHighlight.opacity,
+        }}
+      />
+      {items.map(([to, label]) => (
+        <NavLink
+          key={to}
+          to={to}
+          ref={(node) => {
+            if (node) {
+              tabRefs.current.set(to, node)
+            } else {
+              tabRefs.current.delete(to)
+            }
+          }}
+          onMouseEnter={() => setHoveredPath(to)}
+          onFocus={() => setHoveredPath(to)}
+          onBlur={() => setHoveredPath(null)}
+          className={({ isActive }) =>
+            `relative z-10 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-300 ${
+              isActive || hoveredPath === to ? 'text-white' : 'text-slate-300 hover:text-white'
+            }`
+          }
+        >
+          {label}
+        </NavLink>
+      ))}
+    </nav>
+  )
+}
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -27,20 +125,14 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0f1111]/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-md bg-[#ff4b00] font-black text-white">U</span>
+          <img className="h-10 w-10 rounded-md object-contain" src="/images/logo.png" alt="ULIMA Market" />
           <span>
             <span className="block text-base font-black tracking-wide">ULIMA MARKET</span>
             <span className="block text-xs text-slate-400">Marketplace universitario</span>
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex">
-          {navItems.map(([to, label]) => (
-            <NavLink key={to} to={to} className={navClass}>
-              {label}
-            </NavLink>
-          ))}
-        </nav>
+        <AnimatedNavTabs items={navItems} />
 
         <div className="hidden items-center gap-2 lg:flex">
           <Link className="relative rounded-md border border-white/10 p-2.5 hover:bg-white/8" to="/cart" title="Carrito">
