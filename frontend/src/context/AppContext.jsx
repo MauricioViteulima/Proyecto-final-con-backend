@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { AppContext } from './AppContextBase'
 import { marketplaceProducts as mockMarketplaceProducts, storeProducts } from '../data/mockProducts'
 import { makeId } from '../utils/format'
+import { useAuth } from './AuthContext.jsx'
 import * as publicationApi from '../services/publications.api.js'
 
 const readStorage = (key, fallback) => {
@@ -15,10 +16,9 @@ const readStorage = (key, fallback) => {
 
 const writeStorage = (key, value) => localStorage.setItem(key, JSON.stringify(value))
 
-// --- Adaptador API -> Frontend ---
-// Si el backend usa otros nombres de campo, ajusta solo aquí.
+
 const normalizeFromApi = (item) => ({
-  id: item.id,
+  id: String(item.id),
   type: 'marketplace',
   title: item.title || '',
   description: item.description || '',
@@ -46,7 +46,23 @@ const extractList = (payload) => {
 }
 
 export function AppProvider({ children }) {
+  const { user: authUser } = useAuth()
   const [user, setUserState] = useState(() => readStorage('ulima_user', null))
+
+  useEffect(() => {
+  if (authUser) {
+    setUserState((current) => ({
+      id: String(authUser.id),
+      name: authUser.name,
+      email: authUser.email,
+      reputation: current?.id === String(authUser.id) ? current.reputation : (authUser.reputation ?? 4.6),
+      successfulDeliveries:
+        current?.id === String(authUser.id) ? current.successfulDeliveries : (authUser.successfulDeliveries ?? 0),
+    }))
+  } else {
+    setUserState(null)
+  }
+}, [authUser])
 
   const [marketplaceProducts, setMarketplaceProductsState] = useState(() =>
     mockMarketplaceProducts.map((item) => ({
@@ -78,7 +94,6 @@ export function AppProvider({ children }) {
     else localStorage.removeItem('ulima_user')
   }
 
-  // marketplaceProducts ya no vive en localStorage: mock (fallback) + backend (real)
   const setMarketplaceProducts = setMarketplaceProductsState
   const setCart = persist('ulima_cart', setCartState)
   const setFavorites = persist('ulima_favorites', setFavoritesState)
@@ -89,7 +104,6 @@ export function AppProvider({ children }) {
     window.setTimeout(() => setToast(null), 2600)
   }
 
-  // Carga publicaciones reales del backend y las mezcla con las demo
   useEffect(() => {
     let cancelled = false
     async function loadPublications() {
@@ -102,7 +116,6 @@ export function AppProvider({ children }) {
           return [...apiItems, ...mockOnly]
         })
       } catch (error) {
-        // Si el backend falla, se mantienen solo los productos demo ya cargados
         console.error('No se pudieron cargar las publicaciones del backend', error)
       }
     }

@@ -15,7 +15,6 @@ export default function PublishProduct() {
     else await addMarketplaceProduct(data)
     navigate('/marketplace')
   } catch {
-    // El error ya se notificó vía toast dentro de AppContext; no navegamos si falló.
   }
 }
   return (
