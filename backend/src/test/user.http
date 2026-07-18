@@ -1,4 +1,4 @@
-@baseUrl = https://proyecto-final-backend-green.vercel.app/api/user
+@baseUrl = https://proyecto-backend-beta.vercel.app/api/user
 POST {{baseUrl}}/register 
 Content-Type: application/json 
 

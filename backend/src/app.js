@@ -5,13 +5,6 @@ import userRoutes from './routes/user.routes.js'
 
 const app = express()
 
-const allowedOrigins = [
-  'http://localhost:3000',
-  'http://127.0.0.1:3000',
-  'https://ulima-market.vercel.app',
-  'https://pw-frontend.vercel.app',
-]
-
 app.use(cors())
 
 app.use(express.json())
