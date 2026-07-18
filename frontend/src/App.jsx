@@ -13,7 +13,6 @@ import StoreDetail from './pages/StoreDetail'
 import CartPage from './pages/CartPage'
 import Favorites from './pages/Favorites'
 import Profile from './pages/Profile'
-import Publications from './pages/Publications'
 import NotFound from './pages/NotFound'
 import Toast from './components/Toast'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -36,7 +35,6 @@ export default function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/publications" element={<ProtectedRoute><Publications /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
