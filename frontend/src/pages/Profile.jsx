@@ -3,16 +3,18 @@ import { Link } from 'react-router-dom'
 import Button from '../components/Button'
 import EmptyState from '../components/EmptyState'
 import ProfileCard from '../components/ProfileCard'
+import { useAuth } from '../context/AuthContext.jsx'
 import { useApp } from '../context/useApp'
 import { formatPrice } from '../utils/format'
 
 export default function Profile() {
-  const { user, marketplaceProducts, deleteMarketplaceProduct, transactions, confirmPresencial } = useApp()
+  const { user } = useAuth()
+  const { marketplaceProducts, deleteMarketplaceProduct, transactions, confirmPresencial } = useApp()
 
   if (!user) {
     return (
       <div className="mx-auto max-w-xl">
-        <EmptyState title="Inicia sesion para ver tu perfil" text="El login es simulado y solo requiere correo institucional." />
+        <EmptyState title="Inicia sesión para ver tu perfil" text="Accede con tu usuario ULIMA para ver tu perfil." />
         <div className="mt-4 flex justify-center">
           <Button to="/login">Ingresar</Button>
         </div>

@@ -1,6 +1,15 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api'
+const API_BASE_URL = 'https://proyecto-final-backend-mv20.vercel.app/'
 
 const buildUrl = (path) => `${API_BASE_URL.replace(/\/$/, '')}/${path.replace(/^\//, '')}`
+
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token')
+  if (!token) return { 'Content-Type': 'application/json' }
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  }
+}
 
 const handleResponse = async (response) => {
   const contentType = response.headers.get('Content-Type') || ''
@@ -15,9 +24,7 @@ const handleResponse = async (response) => {
 export async function get(path) {
   const response = await fetch(buildUrl(path), {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getAuthHeaders(),
   })
   return handleResponse(response)
 }
@@ -25,9 +32,7 @@ export async function get(path) {
 export async function post(path, body) {
   const response = await fetch(buildUrl(path), {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(body),
   })
   return handleResponse(response)
@@ -36,9 +41,7 @@ export async function post(path, body) {
 export async function put(path, body) {
   const response = await fetch(buildUrl(path), {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(body),
   })
   return handleResponse(response)
@@ -47,9 +50,7 @@ export async function put(path, body) {
 export async function remove(path) {
   const response = await fetch(buildUrl(path), {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getAuthHeaders(),
   })
   if (response.status === 204) return null
   return handleResponse(response)

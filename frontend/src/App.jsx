@@ -16,6 +16,7 @@ import Profile from './pages/Profile'
 import Publications from './pages/Publications'
 import NotFound from './pages/NotFound'
 import Toast from './components/Toast'
+import ProtectedRoute from './components/ProtectedRoute'
 
 export default function App() {
   return (
@@ -34,8 +35,8 @@ export default function App() {
           <Route path="/store/product/:id" element={<StoreDetail />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/favorites" element={<Favorites />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/publications" element={<Publications />} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/publications" element={<ProtectedRoute><Publications /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

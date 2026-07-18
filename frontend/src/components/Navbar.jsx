@@ -2,6 +2,7 @@ import { Heart, Menu, ShoppingCart, Store, UserRound, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useApp } from '../context/useApp'
+import { useAuth } from '../context/AuthContext.jsx'
 
 const navItems = [
   ['/', 'Home'],
@@ -13,7 +14,8 @@ const navItems = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
-  const { cart, favorites, user, logout } = useApp()
+  const { cart, favorites } = useApp()
+  const { user, logout } = useAuth()
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0)
 
   const navClass = ({ isActive }) =>
