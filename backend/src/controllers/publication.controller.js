@@ -63,7 +63,8 @@ export async function updateItem(req, res) {
     if (validationError) {
       return res.status(400).json({ error: validationError })
     }
-    const item = await repository.update(req.params.id, {
+
+    const payload = {
       title: req.body.title.trim(),
       description: req.body.description.trim(),
       price: Number(req.body.price),
@@ -72,7 +73,17 @@ export async function updateItem(req, res) {
       image: req.body.image || null,
       location: req.body.location || null,
       whatsapp: req.body.whatsapp || null,
-    })
+    }
+
+    if (typeof req.body.status === 'string') {
+      payload.status = req.body.status.trim()
+    }
+
+    if (req.body.interestedCount !== undefined) {
+      payload.interestedCount = Number(req.body.interestedCount)
+    }
+
+    const item = await repository.update(req.params.id, payload)
     if (!item) {
       return res.status(404).json({ error: 'Publicacion no encontrada.' })
     }
