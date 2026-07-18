@@ -44,10 +44,12 @@ const Publication = sequelize.define(
     sellerId: {
       type: DataTypes.STRING,
       allowNull: true,
+      field: 'sellerId',
     },
     sellerName: {
       type: DataTypes.STRING,
       allowNull: true,
+      field: 'sellerName',
     },
     status: {
       type: DataTypes.STRING,
@@ -58,11 +60,13 @@ const Publication = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 0,
+      field: 'interestedCount',
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,
+      field: 'createdAt',
     },
   },
   {
